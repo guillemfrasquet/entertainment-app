@@ -4,7 +4,7 @@ import { ReactComponent as TvIcon } from '../assets/icon-category-tv.svg';
 
 
 
-const HorizontalCard = ({data, contentType}) => {
+const HorizontalCard = ({data, contentType, textPosition}) => {
     const config = useTMDBConfig();
 
         const imageBaseUrl = config.images.secure_base_url;
@@ -34,21 +34,38 @@ const HorizontalCard = ({data, contentType}) => {
             console.log(`The '${data.title}' element has no valid backdrop image, so its card has been hidden`);
             return null; 
         }
+
+        const title = data.title || data.name;
+        const release_date = data.release_date || data.first_air_date;
         
         return (
-            <div className="horizontal-card card">
+            <div className="relative w-80 aspect-[16/9] rounded-md group transition-transform duration-200 hover:scale-105">
                 <img 
                     src={`${imageBaseUrl}${backdropSize}${data.backdrop_path}`} 
                     alt={data.title || 'Backdrop'} 
+                    className="rounded-md"
                 />
-                <div className="card-info">
-                    <div className="card-details">
+
+                {/* Text position deppending on the prop value */}
+                {textPosition === "bottom" ? (
+                    <div className="mt-1">
+                        <div>
                         {contentTypeString}
                         {contentTypeString && " · "}
-                        {data.release_date?.slice(0, 4)}
+                        {release_date?.slice(0, 4)}
+                        </div>
+                        <div className="font-semibold leading-tight">{title}</div>
                     </div>
-                    <div className="card-title">{data.title}</div>
-                </div>
+                ) : (
+                    <div className="absolute bottom-0 left-0 w-full p-2 text-white bg-gradient-to-t from-black to-transparent rounded-b-md">
+                        <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        {contentTypeString}
+                        {contentTypeString && " · "}
+                        {release_date?.slice(0, 4)}
+                        </div>
+                        <div className="font-semibold leading-tight">{title}</div>
+                    </div>
+                )}
                 
             </div>
         );

@@ -3,7 +3,7 @@ import { ReactComponent as MovieIcon } from '../assets/icon-category-movie.svg';
 import { ReactComponent as TvIcon } from '../assets/icon-category-tv.svg';
 
 
-const PosterCard = ({data, contentType}) => {
+const PosterCard = ({data, contentType, textPosition}) => {
     const config = useTMDBConfig();
 
         const imageBaseUrl = config.images.secure_base_url;
@@ -33,19 +33,33 @@ const PosterCard = ({data, contentType}) => {
         }
         
         return (
-            <div className="poster-card card">
+            <div className="relative w-52 rounded-md group transition-transform duration-200 hover:scale-105">
                 <img 
                     src={`${imageBaseUrl}${posterSize}${data.poster_path}`} 
                     alt={data.title || 'Poster'} 
+                    className="rounded-md"
                 />
-                <div className="card-info">
+
+                {/* Text position deppending on the prop value */}
+                {textPosition === "bottom" ? (
+                    <div className="mt-1">
+                    <div>
+                        {contentTypeString}
+                        {contentTypeString && " · "}
+                        {data.release_date?.slice(0, 4)}
+                    </div>
+                    <div className="font-semibold leading-tight">{data.title}</div>
+                </div>
+                ) : (
+                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 absolute bottom-0 left-0 w-full p-2 text-white bg-gradient-to-t from-black to-transparent rounded-b-md">
                     <div className="card-details">
                         {contentTypeString}
                         {contentTypeString && " · "}
                         {data.release_date?.slice(0, 4)}
                     </div>
-                    <div className="card-title">{data.title}</div>
+                    <div className="font-semibold leading-tight">{data.title}</div>
                 </div>
+                )}
             </div>
         );
 }
