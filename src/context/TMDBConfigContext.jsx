@@ -3,12 +3,13 @@ import { createContext, useContext, useEffect, useState } from "react";
 const TMDBConfigContext = createContext(null);
 
 export const TMDBConfigProvider = ({children}) => {
+    const TMDB_API_TOKEN = process.env.REACT_APP_TMDB_API_TOKEN;
     const [config, setConfig] = useState(null);
 
     useEffect(() => {
         fetch("https://api.themoviedb.org/3/configuration", {
             headers: {
-              Authorization: `Bearer [API_TOKEN]`,
+              Authorization: `Bearer ${TMDB_API_TOKEN}`,
               Accept: "application/json",
             },
           })

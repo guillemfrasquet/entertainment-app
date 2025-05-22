@@ -6,6 +6,8 @@ const Main = () => {
     const [popularSeriesList, setPopularSeriesList] = useState([]);
     const [animationSeriesList, setAnimationSeriesList] = useState([]);
 
+    const TMDB_API_TOKEN = process.env.REACT_APP_TMDB_API_TOKEN;
+
     const popularMoviesUrl = 'https://api.themoviedb.org/3/movie/popular?language=en-US&page=1';
     const popularSeriesUrl = 'https://api.themoviedb.org/3/discover/tv?language=en-US&sort_by=popularity.desc&with_genres=18|10765|10751|10766&with_original_language=en';
     const animationSeriesUrl = 'https://api.themoviedb.org/3/discover/tv?language=en-US&sort_by=popularity.desc&with_genres=16';
@@ -13,7 +15,7 @@ const Main = () => {
     useEffect(() => {
         fetch(popularMoviesUrl, {
             headers: {
-                Authorization: 'Bearer [API_TOKEN]',
+                Authorization: `Bearer ${TMDB_API_TOKEN}`,
                 Accept: 'application/json',
             },
         })
@@ -25,7 +27,7 @@ const Main = () => {
     useEffect(() => {
         fetch(popularSeriesUrl, {
             headers: {
-                Authorization: 'Bearer [API_TOKEN]',
+                Authorization: `Bearer ${TMDB_API_TOKEN}`,
                 Accept: 'application/json',
             },
         })
@@ -37,7 +39,7 @@ const Main = () => {
     useEffect(() => {
         fetch(animationSeriesUrl, {
             headers: {
-                Authorization: 'Bearer [API_TOKEN]',
+                Authorization: `Bearer ${TMDB_API_TOKEN}`,
                 Accept: 'application/json',
             },
         })
