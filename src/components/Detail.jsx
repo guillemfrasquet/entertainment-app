@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from 'react-router-dom';
+import { useTMDBConfig } from "../context/TMDBConfigContext";
+
 
 
 const Detail = () => {
@@ -8,11 +10,12 @@ const Detail = () => {
     const [details, setDetails] = useState({});
     const [ratings, setRatings] = useState({});
 
-    let detailsUrl = ``;
-    let ratingsUrl = ``;
+    const config = useTMDBConfig();
     
     
     useEffect(() => {
+        let detailsUrl = ``;
+        let ratingsUrl = ``;
         if(type === "movie") {
             detailsUrl = `https://api.themoviedb.org/3/movie/${id}`;
         } else if (type === "series") {
@@ -48,41 +51,79 @@ const Detail = () => {
 
     }, [id, type]);
 
-    
-    if(type === "movie") {
+
+    if (!config || !config.images) {
+        return <div className='loading'><div className="spinner"></div></div>; 
+      }
+
+      if (!details || Object.keys(details).length === 0) return <div className='loading'><div className="spinner"></div></div>;
+
+          
+    const imageBaseUrl = config.images.secure_base_url;
+    const backdropSize = config.images.backdrop_sizes[3];
+    const imageUrl = details.backdrop_path ? `${imageBaseUrl}${backdropSize}${details.backdrop_path}` : "";
+
+    if (type === "movie") {
         const rating = ratings.results?.find(r =>
-            ["ES", "DE", "FR"].includes(r.iso_3166_1)
-          )?.release_dates?.[0]?.certification;
+          ["ES", "DE", "FR"].includes(r.iso_3166_1)
+        )?.release_dates?.[0]?.certification;
+      
         return (
-            <div>
-                <h1 className="text-5xl">{details.title}</h1>
-                <ul className="list-none flex flex-wrap gap-2">
+          <div className="relative">
+            <img src={imageUrl} className="w-full h-[600px] object-cover object-center z-0" />
+            <div className="absolute inset-0 z-10 bg-gradient-to-b from-[#10141E]/80 to-[#10141E]/100" />
+            <div className="absolute inset-0 z-20 p-24">
+              <h1 className="text-5xl">{details.title}</h1>
+              <div className="inline-flex">
+                <span className="flex flex-wrap my-2 mr-4">
+                  {details.release_date?.slice(0, 4)}
+                </span>
+                {rating && (
+                  <span className="flex flex-wrap border border-gray-500 rounded my-2 mr-4 px-2">
+                    <p>{rating}</p>
+                  </span>
+                )}
                 {Array.isArray(details.genres) && details.genres.length > 0 && (
-                    <ul className="flex flex-wrap gap-2 list-none p-0 m-0">
+                    <ul className="flex flex-wrap gap-2 list-none p-0 my-2">
                         {details.genres.map((genre, i) => (
                         <li key={i} className="bg-[#5A698F] px-2 py-1 rounded-sm text-sm">
                             {genre.name}
                         </li>
                         ))}
                     </ul>
-                )}
-                </ul>
-                <span className="inline-flex border border-gray-500 rounded px-2">{rating && <p>{rating}</p>}</span>
-                <p>{details.overview}</p>
+                    )}
+
+              </div>
+              <p className="w-[50%]">{details.overview}</p>
+
+                  
+              <div className="w-max my-4">
+                <Link to={`/video/${type}/${id}`} className="block">
+                    <div className="bg-[#5A698F] px-8 py-4 rounded-md text-xl">
+                        Play
+                    </div>
+                </Link>
             </div>
+              
+            </div>
+          </div>
         );
-    } else if(type === "series") {
+      } else if(type === "series") {
         const rating = ratings.results?.find(r =>
-            ["ES", "DE", "FR"].includes(r.iso_3166_1)
+            ["ES", "FR", "DE", "GB"].includes(r.iso_3166_1)
           )?.rating;
         return (
-            <div>
+            <div className="relative">
+                <img src={imageUrl} className="w-full h-[600px] object-cover object-center z-0" />
+                <div className="absolute inset-0 z-10 bg-gradient-to-b from-[#10141E]/80 to-[#10141E]/100" />
+                <div className="absolute inset-0 z-20 p-24">
                 <h1 className="text-5xl">{details.name}</h1>
-                <p>{details.number_of_seasons && `${details.number_of_seasons} seasons`}</p>
-                <span className="inline-flex border border-gray-500 rounded px-2">{rating && <p>{rating}</p>}</span>
-                <ul className="list-none flex flex-wrap gap-2">
+                <div className="inline-flex">
+                <span className="flex flex-wrap my-2 mr-4">{details.first_air_date?.slice(0, 4)}</span>
+                {rating && (<span className="flex flex-wrap border border-gray-500 rounded my-2 mr-4 px-2"><p>{rating}</p></span>)}
+                    <ul className="list-none flex flex-wrap gap-2">
                 {Array.isArray(details.genres) && details.genres.length > 0 && (
-                    <ul className="flex flex-wrap gap-2 list-none p-0 m-0">
+                    <ul className="flex flex-wrap gap-2 list-none p-0 my-2">
                         {details.genres.map((genre, i) => (
                         <li key={i} className="bg-[#5A698F] px-2 py-1 rounded-sm text-sm">
                             {genre.name}
@@ -91,7 +132,17 @@ const Detail = () => {
                     </ul>
                 )}
                 </ul>
+                </div>
+                <p className="mb-6">{details.number_of_seasons && `${details.number_of_seasons} seasons`}</p>
                 <p>{details.overview}</p>
+                <div className="w-max my-4">
+                <Link to={`/video/${type}/${id}`} className="block">
+                    <div className="bg-[#5A698F] px-8 py-4 rounded-md text-xl">
+                        Play
+                    </div>
+                </Link>
+            </div>
+            </div>
             </div>
         );
     }
