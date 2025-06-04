@@ -8,6 +8,10 @@ import { ReactComponent as TvIcon } from '../assets/icon-category-tv.svg';
 const HorizontalCard = ({data, contentType, textPosition}) => {
     const config = useTMDBConfig();
 
+    if (!config?.images?.secure_base_url || !config?.images?.poster_sizes) {
+        return null;
+    }
+
         const imageBaseUrl = config.images.secure_base_url;
         const backdropSize = config.images.backdrop_sizes[1];
 
@@ -48,7 +52,7 @@ const HorizontalCard = ({data, contentType, textPosition}) => {
         
         return (
             <Link to={`/detail/${type}/${data.id}`} className="block">
-                <div className="relative w-80 aspect-[16/9] rounded-md group transition-transform duration-200 hover:scale-105">
+                <div className="relative w-[90%] sm:w-60 lg:w-80 aspect-[16/9] rounded-md group transition-transform duration-200 hover:scale-105">
                     <img 
                         src={`${imageBaseUrl}${backdropSize}${data.backdrop_path}`} 
                         alt={data.title || 'Backdrop'} 

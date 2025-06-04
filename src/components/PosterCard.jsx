@@ -8,10 +8,17 @@ import { ReactComponent as TvIcon } from '../assets/icon-category-tv.svg';
 const PosterCard = ({data, contentType, textPosition}) => {
     const config = useTMDBConfig();
 
+    if (!config?.images?.secure_base_url || !config?.images?.poster_sizes) {
+        return null;
+    }
+
         const imageBaseUrl = config.images.secure_base_url;
         const posterSize = config.images.poster_sizes[3];
 
         let contentTypeString = "";
+
+        const title = data.title || data.name;
+        const release_date = data.release_date || data.first_air_date;
         
         if(contentType === "movie") {
             contentTypeString = (
@@ -30,7 +37,7 @@ const PosterCard = ({data, contentType, textPosition}) => {
         }    
     
         if (!data.poster_path) {
-            console.log(`The '${data.title}' element has no valid poster image, so its card has been hidden`);
+            console.log(`The '${title}' element has no valid poster image, so its card has been hidden`);
             return null; 
         }
 
@@ -43,10 +50,10 @@ const PosterCard = ({data, contentType, textPosition}) => {
         
         return (
             <Link to={`/detail/${type}/${data.id}`} className="block">
-                <div className="relative w-52 rounded-md group transition-transform duration-200 hover:scale-105">
+                <div className="relative w-40 sm:w-48 lg:w-52 rounded-md group transition-transform duration-200 hover:scale-105">
                     <img 
                         src={`${imageBaseUrl}${posterSize}${data.poster_path}`} 
-                        alt={data.title || 'Poster'} 
+                        alt={title || 'Poster'} 
                         className="rounded-md"
                     />
 
@@ -56,18 +63,18 @@ const PosterCard = ({data, contentType, textPosition}) => {
                         <div>
                             {contentTypeString}
                             {contentTypeString && " · "}
-                            {data.release_date?.slice(0, 4)}
+                            {release_date?.slice(0, 4)}
                         </div>
-                        <div className="font-semibold leading-tight">{data.title}</div>
+                        <div className="font-semibold leading-tight">{title}</div>
                     </div>
                     ) : (
                     <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 absolute bottom-0 left-0 w-full p-2 text-white bg-gradient-to-t from-black to-transparent rounded-b-md">
                         <div className="card-details">
                             {contentTypeString}
                             {contentTypeString && " · "}
-                            {data.release_date?.slice(0, 4)}
+                            {release_date?.slice(0, 4)}
                         </div>
-                        <div className="font-semibold leading-tight">{data.title}</div>
+                        <div className="font-semibold leading-tight">{title}</div>
                     </div>
                     )}
                 </div>
