@@ -1,12 +1,18 @@
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+
 import { useTMDBConfig } from "../context/TMDBConfigContext";
 import { ReactComponent as MovieIcon } from '../assets/icon-category-movie.svg';
 import { ReactComponent as TvIcon } from '../assets/icon-category-tv.svg';
+
+import BookmarkButton from './BookmarkButton';
 
 
 
 const HorizontalCard = ({data, contentType, textPosition}) => {
     const config = useTMDBConfig();
+    const [isSaved, setIsSaved] = useState(false);
+
 
     if (!config?.images?.secure_base_url || !config?.images?.poster_sizes) {
         return null;
@@ -79,6 +85,7 @@ const HorizontalCard = ({data, contentType, textPosition}) => {
                             <div className="font-semibold leading-tight">{title}</div>
                         </div>
                     )}
+                    <BookmarkButton isSaved={isSaved} setIsSaved={setIsSaved} />
                     
                 </div>
             </Link>

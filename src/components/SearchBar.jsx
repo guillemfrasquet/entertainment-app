@@ -9,7 +9,7 @@ const SearchBar = ({setTextSearched}) => {
     }
 
     return (
-        <div className='search input-search-icon'>
+        <div className='search input-search-icon mb-10'>
                 <input type="text" placeholder="Search for movies or TV series" onChange={changeInputText} className='input-name focus:outline-none w-full text-white bg-transparent h-10 text-xl'></input>
             </div>
     );

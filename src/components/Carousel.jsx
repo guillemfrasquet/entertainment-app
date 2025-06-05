@@ -15,7 +15,7 @@ export default function Carousel({cardType, title, contents, contentType, textPo
                 <h2 className="text-3xl font-extralight pb-4">{title}</h2>
             )
         }
-        <div className="relative">
+        <div className="relative mb-10">
         <Swiper
             modules={[Navigation]}
             navigation
@@ -67,7 +67,7 @@ export default function Carousel({cardType, title, contents, contentType, textPo
                 <h2 className="text-3xl font-extralight pb-4">{title}</h2>
             )
         }
-        <div className="relative">
+        <div className="relative mb-10">
         <Swiper
             modules={[Navigation]}
             navigation
