@@ -6,10 +6,18 @@ import { ReactComponent as MovieIcon } from '../assets/icon-category-movie.svg';
 import { ReactComponent as TvIcon } from '../assets/icon-category-tv.svg';
 import BookmarkButton from './BookmarkButton';
 
+import { useSavedItems } from '../context/SavedItemsContext';
+
 
 const PosterCard = ({data, contentType, textPosition}) => {
     const config = useTMDBConfig();
-    const [isSaved, setIsSaved] = useState(false);
+
+    const { savedItems, toggleSaveItem, isSaved } = useSavedItems();
+    const savedKey = `${contentType}-${data.id}`;
+
+    let isSavedValue = isSaved(savedKey);
+
+    const [isBookmarked, setIsBookmarked] = useState(isSavedValue);
 
     if (!config?.images?.secure_base_url || !config?.images?.poster_sizes) {
         return null;
@@ -80,7 +88,11 @@ const PosterCard = ({data, contentType, textPosition}) => {
                         <div className="font-semibold leading-tight">{title}</div>
                     </div>
                     )}
-                    <BookmarkButton isSaved={isSaved} setIsSaved={setIsSaved}/>
+                    <BookmarkButton isBookmarked={isBookmarked} setIsBookmarked={setIsBookmarked} onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleSaveItem(savedKey);
+                    }}/>
                 </div>
             </Link>
         );

@@ -19,16 +19,19 @@ export const SavedItemsProvider = ({ children }) => {
   }, [savedItems]);
 
   const toggleSaveItem = (key) => {
-  setSavedItems((prev) =>
-    prev.includes(key) 
-      ? prev.filter((item) => item !== key)  // Si ya está en savedItems, lo elimina (quita ese key)
-      : [...prev, key]                       // Si no está, lo añade al array
-  );
+    console.log("ToggleSaveItem " + key);
+    setSavedItems((prev) =>
+      prev.includes(key)
+        ? prev.filter((item) => item !== key)
+        : [...prev, key]
+    );
+  };
+
+  const isSaved = (key) => savedItems.includes(key);
 
   return (
-    <SavedItemsContext.Provider value={{ savedItems, toggleSaveItem }}>
+    <SavedItemsContext.Provider value={{ savedItems, toggleSaveItem, isSaved }}>
       {children}
     </SavedItemsContext.Provider>
   );
-};
 };
