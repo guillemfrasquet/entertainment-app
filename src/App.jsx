@@ -4,8 +4,10 @@ import Main from './components/Main';
 import Detail from './components/Detail';
 import Video from './components/Video';
 import NavBar from './components/NavBar';
+import Movies from './components/Movies';
 import { TMDBConfigProvider } from "./context/TMDBConfigContext";
 import { SavedItemsProvider } from "./context/SavedItemsContext";
+import TvSeries from './components/TvSeries';
 
 
 function App() {
@@ -17,6 +19,8 @@ function App() {
             {<Route index element={<Main />} />}
             {<Route path="/detail/:type/:id" element={<Detail />} />}
             {<Route path="/video/:type/:id" element={<Video />} />}
+            {<Route path="/movies" element={<Movies />} />}
+            {<Route path="/series" element={<TvSeries />} />}
           </Route>
         </Routes>
       </SavedItemsProvider>

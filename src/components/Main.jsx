@@ -88,7 +88,7 @@ const Main = () => {
 
     if(!textSearched || textSearched === "" || textSearched.length <= 2) {
        return(
-            <div className="px-2 lg:px-16">
+            <div className="px-2 lg:pr-12">
             <SearchBar setTextSearched={setTextSearched}/>
             <Carousel cardType={"poster"} title="Trending series this week" contents={trendingSeriesList} contentType={"tv"} limit={10} />
             <Carousel cardType={"poster"} title="Popular movies" contents={popularMoviesList} contentType={"movie"} limit={10} />
@@ -99,8 +99,8 @@ const Main = () => {
         );
     } else {
         return(
-            <div className="px-2 lg:px-16">
-            <SearchBar setTextSearched={setTextSearched}/>
+            <div className="px-2 lg:pr-12">
+            <SearchBar setTextSearched={setTextSearched} searchType={"multi"}/>
             <div className="text-3xl">Search results for "{textSearched}"</div>
             <CardsGrid cardType={"horizontal"} contents={searchResults} contentType={"multi"} />
             </div>
