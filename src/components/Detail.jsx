@@ -1,17 +1,29 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from 'react-router-dom';
 import { useTMDBConfig } from "../context/TMDBConfigContext";
+import { useSavedItems } from '../context/SavedItemsContext';
 
-
+import BookmarkDetailButton from './BookmarkDetailButton';
+import PlayButton from './PlayButton';
 
 const Detail = () => {
-    const { type, id } = useParams();
+    let { type, id } = useParams();
     const TMDB_API_TOKEN = process.env.REACT_APP_TMDB_API_TOKEN;
     const [details, setDetails] = useState({});
     const [ratings, setRatings] = useState({});
 
+    let normalizedType = type;
+
     const config = useTMDBConfig();
+
+    const { savedItems, toggleSaveItem, isSaved } = useSavedItems();
+    const savedKey = `${type}-${id}`;
+
+    let isSavedValue = isSaved(savedKey);
+
+    const [isBookmarked, setIsBookmarked] = useState(isSavedValue);
     
+
     
     useEffect(() => {
         let detailsUrl = ``;
@@ -72,17 +84,15 @@ const Detail = () => {
           <div className="relative">
             <img src={imageUrl} className="w-full h-[600px] object-cover object-center z-0" />
             <div className="absolute inset-0 z-10 bg-gradient-to-b from-[#10141E]/80 to-[#10141E]/100" />
-            <div className="absolute inset-0 z-20 p-24">
+            <div className="absolute inset-0 z-20 p-10 lg:p-24">
               <h1 className="text-5xl">{details.title}</h1>
               <div className="inline-flex">
                 <span className="flex flex-wrap my-2 mr-4">
                   {details.release_date?.slice(0, 4)}
                 </span>
-                {rating && (
-                  <span className="flex flex-wrap border border-gray-500 rounded my-2 mr-4 px-2">
-                    <p>{rating}</p>
-                  </span>
-                )}
+                {rating && (<span className="inline-block border border-gray-500 rounded my-2 mr-4 px-3 py-2 text-sm leading-none align-middle h-fit">
+                    {rating}
+                </span>)}
                 {Array.isArray(details.genres) && details.genres.length > 0 && (
                     <ul className="flex flex-wrap gap-2 list-none p-0 my-2">
                         {details.genres.map((genre, i) => (
@@ -94,15 +104,18 @@ const Detail = () => {
                     )}
 
               </div>
-              <p className="w-[50%]">{details.overview}</p>
+              <p className="lg:w-[50%]">{details.overview}</p>
 
                   
-              <div className="w-max my-4">
+              <div className="w-max my-4 flex items-center gap-5">
                 <Link to={`/video/${type}/${id}`} className="block">
-                    <div className="bg-[#5A698F] px-8 py-4 rounded-md text-xl">
-                        Play
-                    </div>
+                    <PlayButton />
                 </Link>
+                <BookmarkDetailButton isBookmarked={isBookmarked} setIsBookmarked={setIsBookmarked} onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleSaveItem(savedKey);
+                    }}/>
             </div>
               
             </div>
@@ -116,11 +129,13 @@ const Detail = () => {
             <div className="relative">
                 <img src={imageUrl} className="w-full h-[600px] object-cover object-center z-0" />
                 <div className="absolute inset-0 z-10 bg-gradient-to-b from-[#10141E]/80 to-[#10141E]/100" />
-                <div className="absolute inset-0 z-20 p-24">
+                <div className="absolute inset-0 z-20 p-10 lg:p-24">
                 <h1 className="text-5xl">{details.name}</h1>
                 <div className="inline-flex">
                 <span className="flex flex-wrap my-2 mr-4">{details.first_air_date?.slice(0, 4)}</span>
-                {rating && (<span className="flex flex-wrap border border-gray-500 rounded my-2 mr-4 px-2"><p>{rating}</p></span>)}
+                {rating && (<span className="inline-block border border-gray-500 rounded my-2 mr-4 px-3 py-2 text-sm leading-none align-middle h-fit">
+                    {rating}
+                </span>)}
                     <ul className="list-none flex flex-wrap gap-2">
                 {Array.isArray(details.genres) && details.genres.length > 0 && (
                     <ul className="flex flex-wrap gap-2 list-none p-0 my-2">
@@ -134,13 +149,16 @@ const Detail = () => {
                 </ul>
                 </div>
                 <p className="mb-6">{details.number_of_seasons && `${details.number_of_seasons} seasons`}</p>
-                <p>{details.overview}</p>
-                <div className="w-max my-4">
+                <p className="lg:w-[50%]">{details.overview}</p>
+                <div className="w-max my-4 flex items-center gap-2">
                 <Link to={`/video/${type}/${id}`} className="block">
-                    <div className="bg-[#5A698F] px-8 py-4 rounded-md text-xl">
-                        Play
-                    </div>
+                    <PlayButton />
                 </Link>
+                <BookmarkDetailButton isBookmarked={isBookmarked} setIsBookmarked={setIsBookmarked} onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleSaveItem(savedKey);
+                    }}/>
             </div>
             </div>
             </div>

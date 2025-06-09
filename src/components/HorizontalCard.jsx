@@ -5,7 +5,7 @@ import { useTMDBConfig } from "../context/TMDBConfigContext";
 import { ReactComponent as MovieIcon } from '../assets/icon-category-movie.svg';
 import { ReactComponent as TvIcon } from '../assets/icon-category-tv.svg';
 
-import BookmarkButton from './BookmarkButton';
+import BookmarkCardButton from './BookmarkCardButton';
 
 import { useSavedItems } from '../context/SavedItemsContext';
 
@@ -13,9 +13,16 @@ import { useSavedItems } from '../context/SavedItemsContext';
 
 const HorizontalCard = ({data, contentType, textPosition}) => {
     const config = useTMDBConfig();
+
+    let type;
+        if (contentType === "movie") {
+            type = "movie";
+        } else if (contentType === "tv") {
+            type = "series";
+        }
     
     const { savedItems, toggleSaveItem, isSaved } = useSavedItems();
-    const savedKey = `${contentType}-${data.id}`;
+    const savedKey = `${type}-${data.id}`;
 
     let isSavedValue = isSaved(savedKey);
 
@@ -56,13 +63,6 @@ const HorizontalCard = ({data, contentType, textPosition}) => {
         const title = data.title || data.name;
         const release_date = data.release_date || data.first_air_date;
 
-        let type;
-        if (contentType === "movie") {
-            type = "movie";
-        } else if (contentType === "tv") {
-            type = "series";
-        }
-        
         return (
             <Link to={`/detail/${type}/${data.id}`} className="block">
                 <div className="relative w-[90%] sm:w-60 lg:w-80 aspect-[16/9] rounded-md group transition-transform duration-200 hover:scale-105">
@@ -92,7 +92,7 @@ const HorizontalCard = ({data, contentType, textPosition}) => {
                             <div className="font-semibold leading-tight">{title}</div>
                         </div>
                     )}
-                    <BookmarkButton isBookmarked={isBookmarked} setIsBookmarked={setIsBookmarked} onClick={(e) => {
+                    <BookmarkCardButton isBookmarked={isBookmarked} setIsBookmarked={setIsBookmarked} onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
                         toggleSaveItem(savedKey);

@@ -1,7 +1,7 @@
 import { ReactComponent as BookmarkEmptyIcon } from '../assets/icon-bookmark-empty.svg';
 import { ReactComponent as BookmarkFullIcon } from '../assets/icon-bookmark-full.svg';
 
-const BookmarkButton = ({ isBookmarked, setIsBookmarked, onClick }) => {
+const BookmarkCardButton = ({ isBookmarked, setIsBookmarked, onClick }) => {
     const handleClick = (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -10,12 +10,12 @@ const BookmarkButton = ({ isBookmarked, setIsBookmarked, onClick }) => {
     };
 
     return (
-    <div className='absolute top-3 right-3 bg-[#10141e89] hover:bg-[#10141e] w-6 h-6 rounded-full flex items-center justify-center'
+    <div className='bg-[#5A698F] w-14 h-14 rounded-full flex items-center justify-center cursor-pointer select-none'
     onClick={handleClick}>
-        {isBookmarked ? <BookmarkFullIcon /> : <BookmarkEmptyIcon />}
+        {isBookmarked ? <BookmarkFullIcon width={24} height={24} /> : <BookmarkEmptyIcon width={24} height={24} />}
     </div>
     );
 }
 
 
-export default BookmarkButton;
+export default BookmarkCardButton;
