@@ -22,9 +22,8 @@ const HorizontalCard = ({data, contentType, textPosition}) => {
         }
     
     const { savedItems, toggleSaveItem, isSaved } = useSavedItems();
-    const savedKey = `${type}-${data.id}`;
 
-    let isSavedValue = isSaved(savedKey);
+    let isSavedValue = isSaved(type, data.id);
 
     const [isBookmarked, setIsBookmarked] = useState(isSavedValue);
 
@@ -95,7 +94,7 @@ const HorizontalCard = ({data, contentType, textPosition}) => {
                     <BookmarkCardButton isBookmarked={isBookmarked} setIsBookmarked={setIsBookmarked} onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        toggleSaveItem(savedKey);
+                        toggleSaveItem(type, data.id);
                     }}/>
                     
                 </div>

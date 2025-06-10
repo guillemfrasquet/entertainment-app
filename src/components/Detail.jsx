@@ -17,9 +17,8 @@ const Detail = () => {
     const config = useTMDBConfig();
 
     const { savedItems, toggleSaveItem, isSaved } = useSavedItems();
-    const savedKey = `${type}-${id}`;
 
-    let isSavedValue = isSaved(savedKey);
+    let isSavedValue = isSaved(type, id);
 
     const [isBookmarked, setIsBookmarked] = useState(isSavedValue);
     
@@ -114,7 +113,7 @@ const Detail = () => {
                 <BookmarkDetailButton isBookmarked={isBookmarked} setIsBookmarked={setIsBookmarked} onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        toggleSaveItem(savedKey);
+                        toggleSaveItem(type, id);
                     }}/>
             </div>
               
@@ -157,7 +156,7 @@ const Detail = () => {
                 <BookmarkDetailButton isBookmarked={isBookmarked} setIsBookmarked={setIsBookmarked} onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        toggleSaveItem(savedKey);
+                        toggleSaveItem(type, id);
                     }}/>
             </div>
             </div>

@@ -10,7 +10,7 @@ export const useSavedItems = () => useContext(SavedItemsContext);
 export const SavedItemsProvider = ({ children }) => {
   const [savedItems, setSavedItems] = useState(() => {
     const stored = localStorage.getItem('savedItems');
-    return stored ? JSON.parse(stored) : [];
+    return stored ? JSON.parse(stored) : { series: [], movie: [] };
   });
 
   // Actualiza localStorage cada vez que cambie el array
@@ -18,16 +18,22 @@ export const SavedItemsProvider = ({ children }) => {
     localStorage.setItem('savedItems', JSON.stringify(savedItems));
   }, [savedItems]);
 
-  const toggleSaveItem = (key) => {
-    console.log("ToggleSaveItem " + key);
-    setSavedItems((prev) =>
-      prev.includes(key)
-        ? prev.filter((item) => item !== key)
-        : [...prev, key]
-    );
+  const toggleSaveItem = (type, id) => {
+    setSavedItems((prev) => {
+        id = String(id);
+        const current = prev[type] || [];
+        const exists = current.includes(id);
+        const updated = exists
+            ? current.filter((itemId) => itemId !== id)
+            : [...current, id];
+
+        return { ...prev, [type]: updated };
+    });
   };
 
-  const isSaved = (key) => savedItems.includes(key);
+  const isSaved = (type, id) => {
+    return savedItems[type]?.includes(String(id));
+  };
 
   return (
     <SavedItemsContext.Provider value={{ savedItems, toggleSaveItem, isSaved }}>
