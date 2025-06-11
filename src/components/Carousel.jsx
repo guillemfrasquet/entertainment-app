@@ -48,7 +48,9 @@ export default function Carousel({cardType, title, contents, contentType, textPo
             loop={false}
             className="!m-[-15px] !p-[15px]"
         >
-            {contents.map(content => (
+            {contents
+            .filter(content => content.poster_path)
+            .map(content => (
             <SwiperSlide className="!overflow-visible">
                 <div className="relative z-10">
                 <PosterCard data={content} contentType={contentType} textPosition={textPosition}/>
@@ -100,7 +102,9 @@ export default function Carousel({cardType, title, contents, contentType, textPo
             loop={false}
             className="!m-[-15px] !p-[15px]"
         >
-            {contents.map(content => (
+            {contents
+            .filter(content => content.backdrop_path)
+            .map(content => (
             <SwiperSlide className="!overflow-visible">
                 <div className="relative z-10">
                 <HorizontalCard data={content} contentType={contentType} textPosition={textPosition}/>

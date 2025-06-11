@@ -10,7 +10,7 @@ const Movies = () => {
 
 
     const TMDB_API_TOKEN = process.env.REACT_APP_TMDB_API_TOKEN;
-    
+
     let searchUrl = '';
 
     const fetchPopularMovies = async () => {
@@ -58,7 +58,7 @@ const Movies = () => {
        return(
             <div className="px-2 lg:pr-12">
             <SearchBar setTextSearched={setTextSearched} searchType={"movies"}/>
-            <CardsGrid cardType={"horizontal"} contents={popularMoviesList} contentType={"multi"}  title={"Popular movies"}/>
+            <CardsGrid cardType={"horizontal"} contents={popularMoviesList} contentType={"movie"}  title={"Popular movies"}/>
         </div>
             
         );
@@ -67,7 +67,7 @@ const Movies = () => {
             <div className="px-2 lg:pr-12">
             <SearchBar setTextSearched={setTextSearched} searchType={"movies"}/>
             <div className="text-3xl">Search results for "{textSearched}"</div>
-            <CardsGrid cardType={"horizontal"} contents={searchResults} contentType={"movies"}/>
+            <CardsGrid cardType={"horizontal"} contents={searchResults} contentType={"movie"}/>
             </div>
             
         );

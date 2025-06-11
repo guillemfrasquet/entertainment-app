@@ -16,7 +16,7 @@ export default function NavBar() {
             <Link to="/"><NavHomeIcon /></Link>
             <Link to="/movies"><NavMoviesIcon /></Link>
             <Link to="/series"><NavTvSeriesIcon /></Link>
-            <Link to="/"><NavBookmarkIcon /></Link>
+            <Link to="/bookmarked"><NavBookmarkIcon /></Link>
         </div>
         
 
