@@ -1,6 +1,6 @@
 {
-  "short_name": "Entertainment app",
-  "name": "Entertainment app",
+  "short_name": "Streemo",
+  "name": "Streemo - Your stream, your moment",
   "icons": [
     {
       "src": "logo.svg",
@@ -8,7 +8,7 @@
       "type": "image/svg+xml"
     }
   ],
-  "start_url": "./entertainment-app",
+  "start_url": "./streemo",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff"
