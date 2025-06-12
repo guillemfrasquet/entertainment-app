@@ -7,7 +7,8 @@ import PosterCard from "./PosterCard";
 import { Navigation } from "swiper/modules";
 
 export default function Carousel({cardType, title, contents, contentType, textPosition}) {
-  
+    if (contents.length === 0) return null;
+
     if(cardType === "poster") {
         return (
             <>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Outlet, Link } from "react-router-dom";
 import CardsGrid from "./CardsGrid";
 import SearchBar from "./SearchBar";
 import Carousel from "./Carousel";
@@ -33,6 +34,9 @@ async function getDetailsFromIds(idsArray, type) {
 const Bookmarked = () => {
     const [bookmarkedMoviesDetails, setBookmarkedMoviesDetails] = useState([]);
     const [bookmarkedTvSeriesDetails, setBookmarkedTvSeriesDetails] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+
     useEffect(() => {
     const fetchAndSetBookmarked = async () => {
             const stored = JSON.parse(localStorage.getItem('savedItems') || '{}');
@@ -47,17 +51,41 @@ const Bookmarked = () => {
 
             const series = await getDetailsFromIds(bookmarkedSeriesIds, "tv");
             setBookmarkedTvSeriesDetails(series);
+
+            setIsLoading(false);
         };
 
         fetchAndSetBookmarked();
     }, []);
-    return (
-        <>
-            <Carousel cardType={"horizontal"} title="Bookmarked movies" contents={bookmarkedMoviesDetails.slice().reverse()} contentType={"movie"} />
-            <Carousel cardType={"horizontal"} title="Bookmarked TV series" contents={bookmarkedTvSeriesDetails.slice().reverse()} contentType={"tv"} />
-            {/*<Carousel cardType={"horizontal"} title="Bookmarked TV series" contents={bookmarkedSeriesList} contentType={"tv"}/>*/}
-        </>
-    );
+
+    if (isLoading) {
+    return  <div className='loading'><div className="spinner"></div></div>; 
+  }
+
+    if (bookmarkedMoviesDetails.length > 0 || bookmarkedTvSeriesDetails.length > 0) {
+        return (
+            <div className="mt-10">
+                <Carousel cardType={"horizontal"} title="Bookmarked movies" contents={bookmarkedMoviesDetails.slice().reverse()} contentType={"movie"} />
+                <Carousel cardType={"horizontal"} title="Bookmarked TV series" contents={bookmarkedTvSeriesDetails.slice().reverse()} contentType={"tv"} />
+            </div>
+        );
+    } else {
+        return (
+            <div className="mt-10">
+                <h2 className="text-3xl font-extralight pb-12">Your bookmarks</h2>
+                <p className="text-lg">You haven't saved any content yet</p>
+                <p className="mt-2">Start exploring and bookmark your favorite movies and series!</p>
+                <Link to={`/`} className="block">
+                    <button
+                        className="mt-6 px-4 py-2 bg-[#5A698F] text-white rounded transition"
+                    >
+                        Explore content
+                    </button>
+                </Link>
+            </div>
+        );
+    }
+    
 }
 
 export default Bookmarked;
