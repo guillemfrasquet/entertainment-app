@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import CardsGrid from "./CardsGrid";
 import Carousel from "./Carousel";
+import SectionCarousel from "./SectionCarousel";
 import SearchBar from "./SearchBar";
 
 import { useSavedItems } from "../context/SavedItemsContext";
@@ -110,11 +111,55 @@ const Main = () => {
        return(
             <div className="px-2 lg:pr-12">
             <SearchBar setTextSearched={setTextSearched}/>
-            <Carousel cardType={"poster"} title="Trending series this week" contents={trendingSeriesList} contentType={"tv"} limit={10} />
-            <Carousel cardType={"poster"} title="Popular movies" contents={popularMoviesList} contentType={"movie"} limit={10} />
-            <Carousel cardType={"horizontal"} title="Animation" contents={animationSeriesList} contentType={"tv"} limit={10} />
-            <Carousel cardType={"horizontal"} title="Popular series" contents={popularSeriesList} contentType={"tv"}/>
-            <Carousel cardType={"horizontal"} title="Spanish series" contents={popularSpanishSeriesList} contentType={"tv"}/>
+            <SectionCarousel
+                title="Trending series this week"
+                apiUrl="https://api.themoviedb.org/3/trending/tv/week?language=en-US&page=1"
+                contentType="tv"
+                cardType="poster"
+                limit={10}
+            />
+            <SectionCarousel
+                title="Popular movies"
+                apiUrl="https://api.themoviedb.org/3/movie/popular?language=en-US&page=1"
+                contentType="movie"
+                cardType="poster"
+                limit={10}
+            />
+            <SectionCarousel
+                title="Animation series"
+                apiUrl="https://api.themoviedb.org/3/discover/tv?language=en-US&sort_by=popularity.desc&with_genres=16"
+                contentType="tv"
+                cardType="horizontal"
+                limit={10}
+            />
+            <SectionCarousel
+                title="Popular series"
+                apiUrl="https://api.themoviedb.org/3/discover/tv?language=en-US&sort_by=popularity.desc&with_genres=18|10765|10751|10766&with_original_language=en"
+                contentType="tv"
+                cardType="horizontal"
+                limit={10}
+            />
+            <SectionCarousel
+                title="Spanish series"
+                apiUrl="https://api.themoviedb.org/3/discover/tv?sort_by=popularity.desc&with_genres=18|10765|10751|10766&with_origin_country=ES"
+                contentType="tv"
+                cardType="horizontal"
+                limit={10}
+            />
+            <SectionCarousel
+                title="Comedy movies"
+                apiUrl="https://api.themoviedb.org/3/discover/movie?language=en-US&sort_by=popularity.desc&with_genres=35&with_original_language=en"
+                contentType="movie"
+                cardType="poster"
+                limit={10}
+            />
+            <SectionCarousel
+                title="Documentary series"
+                apiUrl="https://api.themoviedb.org/3/discover/tv?air_date.lte=2015-01-01&language=en-US&sort_by=popularity.desc&with_genres=99&with_original_language=en"
+                contentType="tv"
+                cardType="horizontal"
+                limit={10}
+            />
             </div>
             
         );
