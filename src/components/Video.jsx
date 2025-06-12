@@ -9,6 +9,7 @@ const Video = () => {
     const TMDB_API_TOKEN = process.env.REACT_APP_TMDB_API_TOKEN;
 
     const [videoId, setVideoId] = useState("");
+    const [isLoading, setIsLoading] = useState(true);
 
     const config = useTMDBConfig();
 
@@ -30,7 +31,10 @@ const Video = () => {
         })
         .then(res => res.json())
         .then(data => {
-            if (!data?.results?.length) return;
+            if (!data?.results?.length) {
+                setIsLoading(false);
+                return;
+            }
         
             const priorities = ["Trailer", "Teaser", "Featurette"];
             let selected = null;
@@ -45,9 +49,14 @@ const Video = () => {
             if (selected) {
                 setVideoId(selected.key); // .key es el ID de YouTube
             }
+            setIsLoading(false);
         })
         .catch(err => console.error(err));
     }, [id, type]);
+
+    if (isLoading) {
+        return  <div className='loading'><div className="spinner"></div></div>; 
+    }
 
     if(videoId !== "") {
         return (
